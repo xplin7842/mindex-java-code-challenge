@@ -8,49 +8,56 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+/**
+ * 
+ * @author xplin
+ * Jun 24, 2020
+ */
 @Service
 public class ReportStructureServiceImpl implements ReportStructureService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ReportStructureServiceImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ReportStructureServiceImpl.class);
 
-    @Autowired
-    private EmployeeRepository EmployeeRepository;
+	@Autowired
+	private EmployeeRepository EmployeeRepository;
 
+	@Override
+	public ReportStructure read(String id) {
+		LOG.debug("Read ReportStructure with id [{}]", id);
 
-    @Override
-    public ReportStructure read(String id) {
-        LOG.debug("Read ReportStructure with id [{}]", id);
+		Employee employee = EmployeeRepository.findByEmployeeId(id);
 
-        Employee employee = EmployeeRepository.findByEmployeeId(id);
-     
-        int numOfReports = getReportNumberById(id);
-        
-        ReportStructure reportStructure = new ReportStructure();
-        reportStructure.setEmployee(employee);	
-        reportStructure.setNumberOfReports(numOfReports);
-        
-        return reportStructure;
-    }
+		int numOfReports = getReportNumberById(id);
 
-    private int getReportNumberById(String id) {
-        LOG.debug("Read ReportStructure with id [{}]", id);
-        int numOfReports = 0;
-        Employee employee = EmployeeRepository.findByEmployeeId(id);
-        if (employee != null) 
-        {
-        	if(employee.getDirectReports() != null)
-        	{
-		        numOfReports =  employee.getDirectReports().size();
-		        if(numOfReports > 0)
-		        {
-		        	
-		        	for (Employee e :  employee.getDirectReports()) {
-		        		numOfReports += getReportNumberById(e.getEmployeeId());
-		        	}
-		        }
-        	}
-        }
-        return numOfReports;
-    }
+		ReportStructure reportStructure = new ReportStructure();
+		reportStructure.setEmployee(employee);
+		reportStructure.setNumberOfReports(numOfReports);
+
+		return reportStructure;
+	}
+
+	/**
+	 * This method recursively find the total number of reports for an employee by
+	 * ID
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private int getReportNumberById(String id) {
+		LOG.debug("Read ReportStructure with id [{}]", id);
+		int numOfReports = 0;
+		Employee employee = EmployeeRepository.findByEmployeeId(id);
+		if (employee != null) {
+			if (employee.getDirectReports() != null) {
+				numOfReports = employee.getDirectReports().size();
+				if (numOfReports > 0) {
+
+					for (Employee e : employee.getDirectReports()) {
+						numOfReports += getReportNumberById(e.getEmployeeId());
+					}
+				}
+			}
+		}
+		return numOfReports;
+	}
 }

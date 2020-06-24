@@ -13,31 +13,38 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDbFactory;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@EnableMongoRepositories(basePackageClasses = {EmployeeRepository.class, CompensationRepository.class})
+/**
+ * 
+ * @author xplin ( updated)
+ *
+ */
+
+/*
+ * Updated to add new repository CpmpensationRepository
+ */
+@EnableMongoRepositories(basePackageClasses = { EmployeeRepository.class, CompensationRepository.class })
 
 @Configuration
-public class MongoConfig{
-    @Bean
-    public MongoTemplate mongoTemplate(MongoClient mongoClient) {
-        return new MongoTemplate(mongoDbFactory(mongoClient));
-    }
+public class MongoConfig {
+	@Bean
+	public MongoTemplate mongoTemplate(MongoClient mongoClient) {
+		return new MongoTemplate(mongoDbFactory(mongoClient));
+	}
 
-    @Bean
-    public MongoDbFactory mongoDbFactory(MongoClient mongoClient) {
-        return new SimpleMongoClientDbFactory(mongoClient, "test");
-    }
+	@Bean
+	public MongoDbFactory mongoDbFactory(MongoClient mongoClient) {
+		return new SimpleMongoClientDbFactory(mongoClient, "test");
+	}
 
-    @Bean(destroyMethod="shutdown")
-    public MongoServer mongoServer() {
-        MongoServer mongoServer = new MongoServer(new MemoryBackend());
-        mongoServer.bind();
-        return mongoServer;
-    }
+	@Bean(destroyMethod = "shutdown")
+	public MongoServer mongoServer() {
+		MongoServer mongoServer = new MongoServer(new MemoryBackend());
+		mongoServer.bind();
+		return mongoServer;
+	}
 
-    @Bean(destroyMethod="close")
-    public MongoClient mongoClient() {
-        return MongoClients.create("mongodb:/" + mongoServer().getLocalAddress());
-    }
+	@Bean(destroyMethod = "close")
+	public MongoClient mongoClient() {
+		return MongoClients.create("mongodb:/" + mongoServer().getLocalAddress());
+	}
 }
-
-

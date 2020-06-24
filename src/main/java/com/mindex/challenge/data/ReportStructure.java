@@ -1,19 +1,16 @@
 package com.mindex.challenge.data;
 
+/**
+ * 
+ * @author xplin
+ * Jun 24, 2020
+ */
 public class ReportStructure {
-    private Employee employee;
-    private int numberOfReports;
-    public ReportStructure () {
-    }
+	private Employee employee;
+	private int numberOfReports;
 
-    /*
-    public ReportStructure getReportStructure(String employeeId)                 
-    {
-    	ReportStructure reportStr = null;
-    	
-        return reportStr;
-    }
-    */
+	public ReportStructure() {
+	}
 
 	public Employee getEmployee() {
 		return employee;
@@ -31,5 +28,4 @@ public class ReportStructure {
 		this.numberOfReports = numberOfReports;
 	}
 
-	
 }

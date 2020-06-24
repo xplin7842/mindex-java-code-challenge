@@ -12,28 +12,28 @@ import java.io.InputStream;
 
 @Component
 public class DataBootstrap {
-    private static final String DATASTORE_LOCATION = "/static/employee_database.json";
+	private static final String DATASTORE_LOCATION = "/static/employee_database.json";
 
-    @Autowired
-    private EmployeeRepository employeeRepository;
+	@Autowired
+	private EmployeeRepository employeeRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+	@Autowired
+	private ObjectMapper objectMapper;
 
-    @PostConstruct
-    public void init() {
-        InputStream inputStream = this.getClass().getResourceAsStream(DATASTORE_LOCATION);
+	@PostConstruct
+	public void init() {
+		InputStream inputStream = this.getClass().getResourceAsStream(DATASTORE_LOCATION);
 
-        Employee[] employees = null;
+		Employee[] employees = null;
 
-        try {
-            employees = objectMapper.readValue(inputStream, Employee[].class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+		try {
+			employees = objectMapper.readValue(inputStream, Employee[].class);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 
-        for (Employee employee : employees) {
-            employeeRepository.insert(employee);
-        }
-    }
+		for (Employee employee : employees) {
+			employeeRepository.insert(employee);
+		}
+	}
 }
